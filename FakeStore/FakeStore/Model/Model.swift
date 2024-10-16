@@ -7,14 +7,14 @@
 
 import Foundation
 
-// MARK: - WelcomeElement
-struct WelcomeElement: Codable {
+// MARK: - Product
+struct Product: Codable, Identifiable {
     let id: Int
     let title: String
     let price: Double
     let description: String
-    let category: Category
-    let image: String
+    let category: String
+    let image: String?
     let rating: Rating
 }
 
@@ -30,5 +30,3 @@ struct Rating: Codable {
     let rate: Double
     let count: Int
 }
-
-//typealias Welcome = [WelcomeElement]
