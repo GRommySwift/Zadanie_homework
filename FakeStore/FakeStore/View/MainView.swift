@@ -27,59 +27,30 @@ struct MainView: View {
                 })
             }
             .listStyle(.plain)
-            .navigationTitle("Produkty")
+            .navigationTitle(viewModel.selectedCategory ?? "Products")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 Button("Filter") {
                     showPicker.toggle()
                 }
             }
-            .overlay(
-                showPicker ? categoryPickerOverlay : nil
-            )
+            .confirmationDialog("", isPresented: $showPicker) {
+                ForEach(viewModel.categories, id: \.self) { categories in
+                    Button((categories == viewModel.selectedCategory ? "Zrušiť filter \(categories)" : categories),
+                           role: categories == viewModel.selectedCategory ? .destructive : .none) {
+                        if viewModel.selectedCategory == categories {
+                            viewModel.resetFilter()
+                        } else {
+                            viewModel.applyFilter(categories)
+                        }
+                    }
+                }
+            }
+            
         }
     }
 }
 
 #Preview {
     MainView()
-}
-
-extension MainView {
-    var categoryPickerOverlay: some View {
-            VStack {
-                Text("Select Category").font(.headline).padding()
-                List {
-                    ForEach(viewModel.categories, id: \.self) { category in
-                        HStack {
-                            Text(category)
-                            Spacer()
-                            if viewModel.selectedCategory == category {
-                                Text("Remove category \(viewModel.selectedCategory ?? "")")
-                                    .foregroundColor(.red)
-                            }
-                        }
-                        .contentShape(Rectangle()) // Делает весь HStack кликабельным
-                        .onTapGesture {
-                            if viewModel.selectedCategory == category {
-                                viewModel.selectedCategory = nil // Удалить категорию, если она уже выбрана
-                                viewModel.fetchProducts() // Загрузить все продукты без фильтра
-                            } else {
-                                viewModel.selectedCategory = category // Выбрать категорию
-                                viewModel.fetchProducts() // Загрузить продукты для категории
-                            }
-                            showPicker.toggle() // Скрыть оверлей после выбора
-                        }
-                    }
-                }
-                .frame(maxWidth: .infinity, maxHeight: 300) // Ограничение высоты таблицы
-                .background(Color(.systemBackground))
-                .cornerRadius(10)
-                .shadow(radius: 10)
-                .padding()
-            }
-            .background(Color.black.opacity(0.4).ignoresSafeArea()) // Полупрозрачный фон для оверлея
-            .transition(.move(edge: .bottom)) // Анимация появления оверлея
-            .animation(.easeInOut, value: showPicker)
-        }
 }

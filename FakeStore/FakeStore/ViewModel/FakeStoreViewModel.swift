@@ -26,7 +26,6 @@ class FakeStoreViewModel: ObservableObject {
         NetworkManager.shared.fetchCategories()
                 .done { [weak self] categories in
                     self?.categories = categories
-                    print(categories)
                 }
                 .catch { [weak self] error in
                     self?.errorMessage = error.localizedDescription
@@ -65,6 +64,7 @@ class FakeStoreViewModel: ObservableObject {
     func fetchProductByID(id: Int) {
         isLoaded = false
         errorMessage = nil
+        
         NetworkManager.shared.fetchProduct(id: id)
             .done { [weak self] product in
                 self?.productById = product
@@ -76,5 +76,21 @@ class FakeStoreViewModel: ObservableObject {
             .finally { [weak self] in
                 self?.isLoaded = true
             }
+    }
+    
+    func applyFilter(_ category: String) {
+        selectedCategory = category
+        fetchProducts()
+        categories = categories.filter { $0 != category }
+        categories.insert(category, at: 0)
+        print(categories)
+        print(selectedCategory ?? "")
+    }
+    
+    func resetFilter() {
+        selectedCategory = nil
+        categories = []
+        fetchCategories()
+        fetchProducts()
     }
 }

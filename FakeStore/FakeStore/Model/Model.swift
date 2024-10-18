@@ -18,13 +18,6 @@ struct Product: Codable, Identifiable {
     let rating: Rating
 }
 
-//struct Category: Codable {
-//    let electronics: String
-//    let jewelery: String
-//    let menSClothing: String
-//    let womenSClothing: String
-//}
-
 // MARK: - Rating
 struct Rating: Codable {
     let rate: Double
