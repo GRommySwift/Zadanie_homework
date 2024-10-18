@@ -25,6 +25,8 @@ struct DetailView: View {
                 titleAndDescription(product: product)
                 idAndPrice(product: product)
                 Spacer()
+                    .navigationTitle(product.category)
+                    .navigationBarTitleDisplayMode(.inline)
             }
         }
         .onAppear() {

@@ -18,12 +18,12 @@ struct Product: Codable, Identifiable {
     let rating: Rating
 }
 
-enum Category: String, Codable {
-    case electronics = "electronics"
-    case jewelery = "jewelery"
-    case menSClothing = "men's clothing"
-    case womenSClothing = "women's clothing"
-}
+//struct Category: Codable {
+//    let electronics: String
+//    let jewelery: String
+//    let menSClothing: String
+//    let womenSClothing: String
+//}
 
 // MARK: - Rating
 struct Rating: Codable {

@@ -6,31 +6,60 @@
 //
 
 import Foundation
+import PromiseKit
 
 class FakeStoreViewModel: ObservableObject {
     
     @Published var products: [Product] = []
     @Published var productById: Product?
+    @Published var categories: [String] = []
+    @Published var selectedCategory: String? = nil
     @Published var isLoaded: Bool = false
     @Published var errorMessage: String? = nil
     
     init() {
+        fetchCategories()
         fetchProducts()
     }
+    
+    func fetchCategories() {
+        NetworkManager.shared.fetchCategories()
+                .done { [weak self] categories in
+                    self?.categories = categories
+                    print(categories)
+                }
+                .catch { [weak self] error in
+                    self?.errorMessage = error.localizedDescription
+                }
+        }
     
     func fetchProducts() {
         isLoaded = false
         errorMessage = nil
-        NetworkManager.shared.fetchProducts()
-            .done { [weak self] products in
-                self?.products = products
-            }
-            .catch { [weak self] error in
-                self?.errorMessage = error.localizedDescription
-            }
-            .finally { [weak self] in
-                self?.isLoaded = true
-            }
+        
+        if selectedCategory == nil {
+            NetworkManager.shared.fetchProducts()
+                .done { [weak self] products in
+                    self?.products = products
+                }
+                .catch { [weak self] error in
+                    self?.errorMessage = error.localizedDescription
+                }
+                .finally { [weak self] in
+                    self?.isLoaded = true
+                }
+        } else {
+            NetworkManager.shared.fetchProductsByCategory(category: selectedCategory)
+                .done { [weak self] products in
+                    self?.products = products
+                }
+                .catch { [weak self] error in
+                    self?.errorMessage = error.localizedDescription
+                }
+                .finally { [weak self] in
+                    self?.isLoaded = true
+                }
+        }
     }
     
     func fetchProductByID(id: Int) {
