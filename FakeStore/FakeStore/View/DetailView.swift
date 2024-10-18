@@ -13,7 +13,7 @@ struct DetailView: View {
     @ObservedObject var viewModel: FakeStoreViewModel
     
     var body: some View {
-        VStack(spacing: 40) {
+        VStack(spacing: 30) {
             if viewModel.isLoaded == false {
                 ProgressView("Loading..")
                     .padding()
@@ -21,8 +21,9 @@ struct DetailView: View {
                 Text(errorMessage)
             } else if let product = viewModel.productById {
                 AsyncImageLoader(product: product, widthOfImage: 200, heightOfImage: 200)
-                    .padding(.vertical, 40)
+                    .padding(.top, 60)
                 titleAndDescription(product: product)
+                    .padding(.top, 45)
                 idAndPrice(product: product)
                 Spacer()
                     .navigationTitle(product.category)
@@ -43,9 +44,9 @@ struct DetailView: View {
 
 extension DetailView {
     func titleAndDescription(product: Product) -> some View {
-        return VStack(spacing: 40) {
+        return VStack(spacing: 20) {
             Text(product.title)
-                .fontWeight(.bold)
+                .fontWeight(.heavy)
                 .foregroundStyle(.blueText)
             Text(product.description)
                 .foregroundStyle(.gray)

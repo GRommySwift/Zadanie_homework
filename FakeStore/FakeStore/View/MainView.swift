@@ -15,19 +15,22 @@ struct MainView: View {
     var body: some View {
         NavigationView {
             List(viewModel.products, id: \.id) { product in
-                NavigationLink(destination: DetailView(productID: product.id, viewModel: viewModel), label: {
+                ScrollView() {
+                NavigationLink(destination: DetailView(productID: product.id, viewModel: viewModel)) {
                     HStack(spacing: 10) {
                         AsyncImageLoader(product: product, widthOfImage: 73, heightOfImage: 73)
                         VStack(alignment: .leading) {
                             Text(product.title)
+                                .foregroundStyle(.black)
                             Text(product.category)
                                 .foregroundStyle(.gray)
                         }
                     }
-                })
+                }
+                }
             }
             .listStyle(.plain)
-            .navigationTitle(viewModel.selectedCategory ?? "Products")
+            .navigationTitle(viewModel.selectedCategory ?? "Produkty")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 Button("Filter") {
@@ -46,7 +49,6 @@ struct MainView: View {
                     }
                 }
             }
-            
         }
     }
 }
