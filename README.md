@@ -1,17 +1,18 @@
 # Fake store app
-This app is test task for interview.
+This IOS appliction tesk task is created as a part of interview for codium.sk by Roman Holovai at 19.10.2024
 
 # Criteria of app:
-- iOS 15+
-- Swift
-- SwiftUI
-- Codable
-- Alamofire
-- Async / PromiseKit
-- Git
+- [x] iOS 15+
+- [x] Swift
+- [x] SwiftUI
+- [x] Codable
+- [x] Alamofire
+- [x] Async / PromiseKit
+- [x] Git
 
+# Screenshots & screen video:
 <p align="leading">
-  <img src="https://github.com/GRommySwift/CoctailsApp/blob/main/1.png" width="250"/>
-  <img src="https://github.com/GRommySwift/CoctailsApp/blob/main/2.png" width="250"/>
-  <img src="https://github.com/GRommySwift/CoctailsApp/blob/main/3.gif" width="250"/>
+  <img src="1.png" width="250"/>
+  <img src="2.png" width="250"/>
+  <img src="3.gif" width="250"/>
 </p>
