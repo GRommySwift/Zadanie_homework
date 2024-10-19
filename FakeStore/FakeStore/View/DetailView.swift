@@ -11,19 +11,22 @@ struct DetailView: View {
     
     let productID: Int
     @ObservedObject var viewModel: FakeStoreViewModel
+    private let idOfProductText = "ID productu:"
+    private let priceOfProductText = "Cena:"
+    private let imageSize: CGFloat = 200
     
     var body: some View {
-        VStack(spacing: 30) {
+        VStack(spacing: .thirty) {
             if viewModel.isLoaded == false {
                 ProgressView("Loading..")
                     .padding()
             } else if let errorMessage = viewModel.errorMessage {
                 Text(errorMessage)
             } else if let product = viewModel.productById {
-                AsyncImageLoader(product: product, widthOfImage: 200, heightOfImage: 200)
-                    .padding(.top, 60)
+                AsyncImageLoader(product: product, widthOfImage: imageSize, heightOfImage: imageSize)
+                    .padding(.top, .sixty)
                 titleAndDescription(product: product)
-                    .padding(.top, 45)
+                    .padding(.top, .fortyFive)
                 idAndPrice(product: product)
                 Spacer()
                     .navigationTitle(product.category)
@@ -40,11 +43,11 @@ struct DetailView: View {
     DetailView(productID: 2, viewModel: FakeStoreViewModel())
 }
 
-//MARK: Extension of DetailView
+//MARK: View components
 
 extension DetailView {
     func titleAndDescription(product: Product) -> some View {
-        return VStack(spacing: 20) {
+        return VStack(spacing: .twenty) {
             Text(product.title)
                 .fontWeight(.heavy)
                 .foregroundStyle(.blueText)
@@ -53,7 +56,7 @@ extension DetailView {
                 .font(.footnote)
             
         }
-        .padding(.horizontal, 30)
+        .padding(.horizontal, .thirty)
     }
     func idAndPrice(product: Product) -> some View {
         HStack {
@@ -61,12 +64,12 @@ extension DetailView {
             Spacer()
             priceOfProduct(product: product)
         }
-        .padding(.horizontal, 30)
+        .padding(.horizontal, .thirty)
     }
     
     func idOfProduct(product: Product) -> some View {
         VStack(alignment: .leading) {
-            Text("ID productu:")
+            Text(idOfProductText)
                 .foregroundStyle(.gray)
                 .font(.footnote)
             Text("\(product.id)")
@@ -75,7 +78,7 @@ extension DetailView {
     
     func priceOfProduct(product: Product) -> some View {
         VStack(alignment: .trailing) {
-            Text("Cena:")
+            Text(priceOfProductText)
                 .foregroundStyle(.gray)
                 .font(.footnote)
             Text("\((product.price))" + "€")

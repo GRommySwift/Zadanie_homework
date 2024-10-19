@@ -11,14 +11,17 @@ struct MainView: View {
     
     @StateObject private var viewModel = FakeStoreViewModel()
     @State private var showPicker = false
+    private let productNavTitle = "Produkty"
+    private let clearFilterText = "Zrušiť filter"
+    private let buttonText = "Filter"
+    private let imageSize: CGFloat = 73
     
     var body: some View {
         NavigationView {
             List(viewModel.products, id: \.id) { product in
-                ScrollView() {
                 NavigationLink(destination: DetailView(productID: product.id, viewModel: viewModel)) {
-                    HStack(spacing: 10) {
-                        AsyncImageLoader(product: product, widthOfImage: 73, heightOfImage: 73)
+                    HStack(spacing: .ten) {
+                        AsyncImageLoader(product: product, widthOfImage: imageSize, heightOfImage: imageSize)
                         VStack(alignment: .leading) {
                             Text(product.title)
                                 .foregroundStyle(.black)
@@ -27,28 +30,16 @@ struct MainView: View {
                         }
                     }
                 }
-                }
             }
             .listStyle(.plain)
-            .navigationTitle(viewModel.selectedCategory ?? "Produkty")
+            .navigationTitle(viewModel.selectedCategory ?? productNavTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                Button("Filter") {
+                Button(buttonText) {
                     showPicker.toggle()
                 }
             }
-            .confirmationDialog("", isPresented: $showPicker) {
-                ForEach(viewModel.categories, id: \.self) { categories in
-                    Button((categories == viewModel.selectedCategory ? "Zrušiť filter \(categories)" : categories),
-                           role: categories == viewModel.selectedCategory ? .destructive : .none) {
-                        if viewModel.selectedCategory == categories {
-                            viewModel.resetFilter()
-                        } else {
-                            viewModel.applyFilter(categories)
-                        }
-                    }
-                }
-            }
+            .confirmationDialog(showPicker: $showPicker, viewModel: viewModel, clearFilterText: clearFilterText)
         }
     }
 }

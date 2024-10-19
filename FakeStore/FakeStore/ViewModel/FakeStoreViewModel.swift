@@ -83,8 +83,6 @@ class FakeStoreViewModel: ObservableObject {
         fetchProducts()
         categories = categories.filter { $0 != category }
         categories.insert(category, at: 0)
-        print(categories)
-        print(selectedCategory ?? "")
     }
     
     func resetFilter() {
