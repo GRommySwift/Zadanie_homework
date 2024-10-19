@@ -19,7 +19,7 @@ struct MainView: View {
     var body: some View {
         NavigationView {
             List(viewModel.products, id: \.id) { product in
-                NavigationLink(destination: DetailView(productID: product.id, viewModel: viewModel)) {
+                ZStack(alignment: .leading) {
                     HStack(spacing: .ten) {
                         AsyncImageLoader(product: product, widthOfImage: imageSize, heightOfImage: imageSize)
                         VStack(alignment: .leading) {
@@ -29,6 +29,10 @@ struct MainView: View {
                                 .foregroundStyle(.gray)
                         }
                     }
+                    NavigationLink(destination: DetailView(productID: product.id, viewModel: viewModel)) {
+                        EmptyView()
+                    }
+                    .opacity(0)
                 }
             }
             .listStyle(.plain)

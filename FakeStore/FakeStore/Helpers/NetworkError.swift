@@ -10,6 +10,8 @@ import Foundation
 enum NetworkError: Error {
     case invalidURL
     case networkError(Error)
+    case invalidResponse
+    case invalidData
 }
 
 extension NetworkError: LocalizedError {
@@ -19,6 +21,10 @@ extension NetworkError: LocalizedError {
             return "Invalid url"
         case .networkError(let error):
             return "Network error: \(error.localizedDescription)"
+        case .invalidResponse:
+            return "Invalid response from server"
+        case .invalidData:
+            return "Invalid data"
         }
     }
 }

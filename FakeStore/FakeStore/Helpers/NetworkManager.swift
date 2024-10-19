@@ -12,45 +12,38 @@ import PromiseKit
 final class NetworkManager {
     
     static var shared = NetworkManager()
+    private let decoder = JSONDecoder()
     private init() {}
     
-    func fetchCategories() -> Promise<[String]> {
-        return Promise { seal in
-            guard let url = URLConstant.categories.url else {
-                seal.reject(NetworkError.invalidURL)
-                return
-            }
-            AF.request(url)
-                .validate()
-                .responseDecodable(of: [String].self) { response in
-                    switch response.result {
-                    case .success(let categories):
-                        seal.fulfill(categories)
-                    case .failure(let error):
-                        seal.reject(NetworkError.networkError(error))
-                    }
-                }
+    //MARK: Async method to get from API with URLSession
+    
+    func fetchCategories() async throws -> [String] {
+        guard let url = URLConstant.categories.url else {
+            throw NetworkError.invalidURL
+        }
+        let (data, response) = try await URLSession.shared.data(from: url)
+        guard let response = response as? HTTPURLResponse, response.statusCode == 200 else { throw NetworkError.invalidResponse }
+        do {
+            return try decoder.decode([String].self, from: data)
+        } catch {
+            throw NetworkError.invalidData
         }
     }
     
-    func fetchProducts() -> Promise<[Product]> {
-        return Promise { seal in
-            guard let url = URLConstant.products.url else {
-                seal.reject(NetworkError.invalidURL)
-                return
-            }
-            AF.request(url)
-                .validate()
-                .responseDecodable(of: [Product].self) { response in
-                    switch response.result {
-                    case .success(let products):
-                        seal.fulfill(products)
-                    case .failure(let error):
-                        seal.reject(NetworkError.networkError(error))
-                    }
-                }
+    //MARK: Async method to get from API with Alamofire
+    
+    func fetchProducts() async throws -> [Product] {
+        guard let url = URLConstant.products.url else {
+            throw NetworkError.invalidURL
         }
+        let dataResponse = try await AF.request(url)
+            .validate()
+            .serializingDecodable([Product].self).value
+        
+        return dataResponse
     }
+    
+    //MARK: Getting data with Alamofire / PromiseKit
     
     func fetchProduct(id: Int) -> Promise<Product> {
         return Promise { seal in

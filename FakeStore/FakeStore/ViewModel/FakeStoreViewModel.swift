@@ -23,30 +23,19 @@ class FakeStoreViewModel: ObservableObject {
     }
     
     func fetchCategories() {
-        NetworkManager.shared.fetchCategories()
-                .done { [weak self] categories in
-                    self?.categories = categories
-                }
-                .catch { [weak self] error in
-                    self?.errorMessage = error.localizedDescription
-                }
+        Task {
+            self.categories = try await NetworkManager.shared.fetchCategories()
         }
+    }
     
     func fetchProducts() {
         isLoaded = false
         errorMessage = nil
         
         if selectedCategory == nil {
-            NetworkManager.shared.fetchProducts()
-                .done { [weak self] products in
-                    self?.products = products
-                }
-                .catch { [weak self] error in
-                    self?.errorMessage = error.localizedDescription
-                }
-                .finally { [weak self] in
-                    self?.isLoaded = true
-                }
+            Task {
+                self.products = try await NetworkManager.shared.fetchProducts()
+            }
         } else {
             NetworkManager.shared.fetchProductsByCategory(category: selectedCategory)
                 .done { [weak self] products in
