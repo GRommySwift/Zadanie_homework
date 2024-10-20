@@ -1,5 +1,5 @@
 //
-//  View + Extension.swift
+//  View+Extension.swift
 //  FakeStore
 //
 //  Created by Roman on 19/10/2024.
@@ -8,7 +8,7 @@
 import SwiftUI
 // Custom padding number by ENUM
 extension View {
-    func padding(_ edges: Edge.Set = .all, _ theme: Theme) -> some View {
+    func padding(_ edges: Edge.Set = .all, _ theme: Padding) -> some View {
         self.padding(edges, theme.rawValue)
     }
 }
@@ -31,4 +31,25 @@ extension View {
                 }
             }
     }
+}
+// Navigation for the FakeStoreView, works on background and hidden.
+// It's the best solution(my opinion) to hide disclosure arrows of NavigationLink.
+extension View {
+    func backgroundNavigation(_ viewModel: FakeStoreViewModel) -> some View {
+        let binding = Binding<Int?>(
+            get: { viewModel.selectedProductId },
+            set: { viewModel.selectedProductId = $0 }
+        )
+        
+        return self
+            .background(
+                NavigationLink(
+                    destination: DetailView(productID: viewModel.selectedProductId ?? 0, viewModel: viewModel),
+                    tag: viewModel.selectedProductId ?? 0,
+                    selection: binding
+                ) {
+                    EmptyView()
+                }
+                    .hidden()
+            )}
 }

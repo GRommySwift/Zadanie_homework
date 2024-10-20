@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-enum Theme: CGFloat {
+enum Padding: CGFloat {
     case ten = 10
     case twenty = 20
     case thirty = 30

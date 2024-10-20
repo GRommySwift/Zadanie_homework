@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  FakeStoreView.swift
 //  FakeStore
 //
 //  Created by Roman on 15/10/2024.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct MainView: View {
+struct FakeStoreView: View {
     
     @StateObject private var viewModel = FakeStoreViewModel()
     @State private var showPicker = false
@@ -19,25 +19,12 @@ struct MainView: View {
     var body: some View {
         NavigationView {
             List(viewModel.products, id: \.id) { product in
-                ZStack(alignment: .leading) {
-                    HStack(spacing: .ten) {
-                        AsyncImageLoader(product: product, widthOfImage: imageSize, heightOfImage: imageSize)
-                        VStack(alignment: .leading) {
-                            Text(product.title)
-                                .foregroundStyle(.black)
-                            Text(product.category)
-                                .foregroundStyle(.gray)
-                        }
-                    }
-                    NavigationLink(destination: DetailView(productID: product.id, viewModel: viewModel)) {
-                        EmptyView()
-                    }
-                    .opacity(0)
-                }
+                productView(product)
             }
             .listStyle(.plain)
             .navigationTitle(viewModel.selectedCategory ?? productNavTitle)
             .navigationBarTitleDisplayMode(.inline)
+            .backgroundNavigation(viewModel)
             .toolbar {
                 Button(buttonText) {
                     showPicker.toggle()
@@ -49,5 +36,26 @@ struct MainView: View {
 }
 
 #Preview {
-    MainView()
+    FakeStoreView()
+}
+
+//MARK: View components
+
+extension FakeStoreView {
+    func productView(_ product: Product) -> some View {
+        Button(action: {
+            viewModel.selectedProduct(productID: product.id)
+        }) {
+            HStack(spacing: .ten) {
+                AsyncImageLoader(product: product, widthOfImage: imageSize, heightOfImage: imageSize)
+                VStack(alignment: .leading) {
+                    Text(product.title)
+                        .foregroundStyle(.black)
+                    Text(product.category)
+                        .foregroundStyle(.gray)
+                }
+            }
+        }
+        .buttonStyle(PlainButtonStyle())
+    }
 }

@@ -25,9 +25,9 @@ struct DetailView: View {
             } else if let product = viewModel.productById {
                 AsyncImageLoader(product: product, widthOfImage: imageSize, heightOfImage: imageSize)
                     .padding(.top, .sixty)
-                titleAndDescription(product: product)
+                titleAndDescription(product)
                     .padding(.top, .fortyFive)
-                idAndPrice(product: product)
+                idAndPrice(product)
                 Spacer()
                     .navigationTitle(product.category)
                     .navigationBarTitleDisplayMode(.inline)
@@ -46,7 +46,7 @@ struct DetailView: View {
 //MARK: View components
 
 extension DetailView {
-    func titleAndDescription(product: Product) -> some View {
+    func titleAndDescription(_ product: Product) -> some View {
         return VStack(spacing: .twenty) {
             Text(product.title)
                 .fontWeight(.heavy)
@@ -58,16 +58,16 @@ extension DetailView {
         }
         .padding(.horizontal, .thirty)
     }
-    func idAndPrice(product: Product) -> some View {
+    func idAndPrice(_ product: Product) -> some View {
         HStack {
-            idOfProduct(product: product)
+            idOfProduct(product)
             Spacer()
-            priceOfProduct(product: product)
+            priceOfProduct(product)
         }
         .padding(.horizontal, .thirty)
     }
     
-    func idOfProduct(product: Product) -> some View {
+    func idOfProduct(_ product: Product) -> some View {
         VStack(alignment: .leading) {
             Text(idOfProductText)
                 .foregroundStyle(.gray)
@@ -76,7 +76,7 @@ extension DetailView {
         }
     }
     
-    func priceOfProduct(product: Product) -> some View {
+    func priceOfProduct(_ product: Product) -> some View {
         VStack(alignment: .trailing) {
             Text(priceOfProductText)
                 .foregroundStyle(.gray)

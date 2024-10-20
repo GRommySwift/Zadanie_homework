@@ -14,6 +14,7 @@ class FakeStoreViewModel: ObservableObject {
     @Published var productById: Product?
     @Published var categories: [String] = []
     @Published var selectedCategory: String? = nil
+    @Published var selectedProductId: Int? = nil
     @Published var isLoaded: Bool = false
     @Published var errorMessage: String? = nil
     
@@ -22,13 +23,17 @@ class FakeStoreViewModel: ObservableObject {
         fetchProducts()
     }
     
-    func fetchCategories() {
+    func selectedProduct(productID: Int) {
+        selectedProductId = productID
+    }
+    
+    private func fetchCategories() {
         Task {
             self.categories = try await NetworkManager.shared.fetchCategories()
         }
     }
     
-    func fetchProducts() {
+    private func fetchProducts() {
         isLoaded = false
         errorMessage = nil
         
