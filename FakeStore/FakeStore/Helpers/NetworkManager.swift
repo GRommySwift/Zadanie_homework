@@ -15,7 +15,7 @@ final class NetworkManager {
     private let decoder = JSONDecoder()
     private init() {}
     
-    //MARK: Async method to get from API with URLSession
+    //MARK: Async method to get data from API with URLSession
     
     func fetchCategories() async throws -> [String] {
         guard let url = URLConstant.categories.url else {
@@ -30,7 +30,7 @@ final class NetworkManager {
         }
     }
     
-    //MARK: Async method to get from API with Alamofire
+    //MARK: Async method to get data from API with Alamofire
     
     func fetchProducts() async throws -> [Product] {
         guard let url = URLConstant.products.url else {
